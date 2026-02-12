@@ -560,7 +560,7 @@ mvn -q -DskipTests exec:java -Dmode=ui -Dcount=100 -Dfight=ordered
 # → Log: "Simulación detenida. Total muertos: X"
 ```
 
-✅ **Parada ordenada sin hilos huérfanos.**
+**Parada ordenada sin hilos huérfanos.**
 
 ---
 
