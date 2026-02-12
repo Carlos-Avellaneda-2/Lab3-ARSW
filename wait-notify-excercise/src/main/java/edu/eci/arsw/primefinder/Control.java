@@ -4,7 +4,8 @@
  * and open the template in the editor.
  */
 package edu.eci.arsw.primefinder;
-import java.util.Scanner;
+import java.util.LinkedList;
+
 /**
  *
  */
@@ -13,22 +14,50 @@ public class Control extends Thread {
     private final static int NTHREADS = 3;
     private final static int MAXVALUE = 30000000;
     private final static int TMILISECONDS = 5000;
+    private final PauseController pauseController = new PauseController();
 
     private final int NDATA = MAXVALUE / NTHREADS;
+    private final int QUEUE_LIMIT = 100; // Bounded queue size
+    private final LinkedList<Integer> queue = new LinkedList<>();
 
-    private PrimeFinderThread pft[];
-    private PauseController controller = new PauseController();
-    
+    private PrimeFinderThread[] pft;
+    private static Control instance;
+
     private Control() {
         super();
-        this.pft = new  PrimeFinderThread[NTHREADS];
-
+        instance = this;
+        this.pft = new PrimeFinderThread[NTHREADS];
         int i;
-        for(i = 0;i < NTHREADS - 1; i++) {
-            PrimeFinderThread elem = new PrimeFinderThread(i*NDATA, (i+1)*NDATA, controller);
+        for (i = 0; i < NTHREADS - 1; i++) {
+            PrimeFinderThread elem = new PrimeFinderThread(i * NDATA, (i + 1) * NDATA, pauseController);
             pft[i] = elem;
         }
-        pft[i] = new PrimeFinderThread(i*NDATA, MAXVALUE + 1, controller);
+        pft[i] = new PrimeFinderThread(i * NDATA, MAXVALUE + 1, pauseController);
+    }
+
+    public static Control getInstance() {
+        return instance;
+    }
+
+    public void produce(int prime) throws InterruptedException {
+        synchronized (queue) {
+            while (queue.size() >= QUEUE_LIMIT) {
+                queue.wait(); 
+            }
+            queue.add(prime);
+            queue.notifyAll();
+        }
+    }
+
+    public int consume() throws InterruptedException {
+        synchronized (queue) {
+            while (queue.isEmpty()) {
+                queue.wait(); 
+            }
+            int prime = queue.removeFirst();
+            queue.notifyAll();
+            return prime;
+        }
     }
     
     public static Control newControl() {
@@ -37,28 +66,21 @@ public class Control extends Thread {
 
     @Override
     public void run() {
-        for(int i = 0;i < NTHREADS;i++ ) {
+        for (int i = 0; i < NTHREADS; i++) {
             pft[i].start();
-            try (Scanner scanner = new Scanner(System.in)){
-                while(true){
-                    Thread.sleep(TMILISECONDS);
-                    controller.pauseAll();
-                    System.out.println("----Pausado----");
-                    int cont = 0;
-                    for(PrimeFinderThread t:pft){
-                        cont += t.getPrimes().size();
-                    }
-                    System.out.println("Numeros Primos: " + cont);
-                    System.out.println("Presiona Enter para continuar...");
-                    scanner.nextLine();
-                    controller.resumeAll();
-                    System.out.println("----Resumido----");
+        }
+
+        Thread consumer = new Thread(() -> {
+            try {
+                while (true) {
+                    int prime = consume();
+                    System.out.println(prime);
                 }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
             }
-            catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-        }
-        }
+        });
+        consumer.start();
     }
     
 }

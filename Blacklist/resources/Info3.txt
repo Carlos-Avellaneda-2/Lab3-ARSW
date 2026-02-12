@@ -1,0 +1,28 @@
+=== Testing IP with many coincidences ===
+ene 29, 2026 11:03:51 A. M. edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade reportAsNotTrustworthy
+INFORMACIÓN: HOST 202.24.34.55 Reported as NOT trustworthy
+ene 29, 2026 11:03:51 A. M. edu.eci.arsw.blacklistvalidator.HostBlackListsValidator checkHost
+INFORMACIÓN: Checked Black Lists:80.000 of 80.000
+Threads: 1 | Found in blacklists: [29, 10034, 20200, 31000, 70500] | Time: 143080ms
+ene 29, 2026 11:04:27 A. M. edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade reportAsNotTrustworthy
+INFORMACIÓN: HOST 202.24.34.55 Reported as NOT trustworthy
+ene 29, 2026 11:04:27 A. M. edu.eci.arsw.blacklistvalidator.HostBlackListsValidator checkHost
+INFORMACIÓN: Checked Black Lists:80.000 of 80.000
+Threads: 4 | Found in blacklists: [29, 10034, 20200, 31000, 70500] | Time: 35127ms
+ene 29, 2026 11:04:44 A. M. edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade reportAsNotTrustworthy
+INFORMACIÓN: HOST 202.24.34.55 Reported as NOT trustworthy
+ene 29, 2026 11:04:44 A. M. edu.eci.arsw.blacklistvalidator.HostBlackListsValidator checkHost
+INFORMACIÓN: Checked Black Lists:80.000 of 80.000
+Threads: 8 | Found in blacklists: [29, 10034, 20200, 31000, 70500] | Time: 17795ms
+ene 29, 2026 11:04:47 A. M. edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade reportAsNotTrustworthy
+INFORMACIÓN: HOST 202.24.34.55 Reported as NOT trustworthy
+ene 29, 2026 11:04:47 A. M. edu.eci.arsw.blacklistvalidator.HostBlackListsValidator checkHost
+INFORMACIÓN: Checked Black Lists:80.000 of 80.000
+Threads: 50 | Found in blacklists: [29, 10034, 20200, 31000, 70500] | Time: 2951ms
+ene 29, 2026 11:04:49 A. M. edu.eci.arsw.spamkeywordsdatasource.HostBlacklistsDataSourceFacade reportAsNotTrustworthy
+INFORMACIÓN: HOST 202.24.34.55 Reported as NOT trustworthy
+ene 29, 2026 11:04:49 A. M. edu.eci.arsw.blacklistvalidator.HostBlackListsValidator checkHost
+INFORMACIÓN: Checked Black Lists:80.000 of 80.000
+Threads: 100 | Found in blacklists: [29, 10034, 20200, 31000, 70500] | Time: 1544ms
+
+Process finished with exit code 0
