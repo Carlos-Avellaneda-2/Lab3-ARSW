@@ -3,43 +3,41 @@ package edu.eci.arsw.primefinder;
 import java.util.LinkedList;
 import java.util.List;
 
+
 public class PrimeFinderThread extends Thread{
-
-
-    int a,b;
-
+    int a, b;
+    private final PauseController controller;
+    private final Control control;
     private List<Integer> primes;
 
-    private final PauseController controller;
-
-    public PrimeFinderThread(int a, int b,PauseController controller) {
+    public PrimeFinderThread(int a, int b, PauseController controller) {
         super();
-        this.primes = new LinkedList<>();
         this.a = a;
         this.b = b;
+        this.primes = new LinkedList<>();
         this.controller = controller;
+        this.control = Control.getInstance();
     }
 
     @Override
-    public void run(){
-        try {
-            for (int i= a;i < b;i++){
-                controller.awaitIfPaused();
-                if (isPrime(i)){
+    public void run() {
+        for (int i = a; i < b; i++) {
+            try {
+                controller.awaitIfPaused(); 
+                if (isPrime(i)) {
                     primes.add(i);
-                    System.out.println(i);
+                    control.produce(i);
                 }
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;
             }
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
         }
     }
-
-
-
-    boolean isPrime(int n) {
+	
+	boolean isPrime(int n) {
         boolean ans;
-        if (n > 2) {
+        if (n > 2) { 
             ans = n%2 != 0;
             for(int i = 3;ans && i*i <= n; i+=2 ) {
                 ans = n % i != 0;
@@ -48,10 +46,7 @@ public class PrimeFinderThread extends Thread{
             ans = n == 2;
         }
         return ans;
-    }
+	}
 
-    public List<Integer> getPrimes() {
-        return primes;
-    }
-
+    public List<Integer> getPrimes() {return primes; }
 }

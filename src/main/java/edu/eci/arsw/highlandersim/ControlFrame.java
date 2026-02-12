@@ -1,12 +1,24 @@
 package edu.eci.arsw.highlandersim;
 
-import edu.eci.arsw.immortals.Immortal;
-import edu.eci.arsw.immortals.ImmortalManager;
-
-import javax.swing.*;
-import java.awt.*;
+import java.awt.BorderLayout;
+import java.awt.FlowLayout;
+import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.util.List;
+
+import javax.swing.JButton;
+import javax.swing.JComboBox;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JSpinner;
+import javax.swing.JTextArea;
+import javax.swing.SpinnerNumberModel;
+import javax.swing.SwingUtilities;
+
+import edu.eci.arsw.immortals.Immortal;
+import edu.eci.arsw.immortals.ImmortalManager;
 
 public final class ControlFrame extends JFrame {
 
@@ -78,14 +90,23 @@ public final class ControlFrame extends JFrame {
     manager.pause();
     List<Immortal> pop = manager.populationSnapshot();
     long sum = 0;
+    int alive = 0;
     StringBuilder sb = new StringBuilder();
     for (Immortal im : pop) {
       int h = im.getHealth();
       sum += h;
-      sb.append(String.format("%-14s : %5d%n", im.name(), h));
+      if (im.isAlive()) {
+        sb.append(String.format("%-14s : %5d (alive)%n", im.name(), h));
+        alive++;
+      } else {
+        sb.append(String.format("%-14s : %5d (DEAD)%n", im.name(), h));
+      }
     }
     sb.append("--------------------------------\n");
-    sb.append("Total Health: ").append(sum).append('\n');
+    long expected = manager.expectedTotalHealth();
+    sb.append("Total Health: ").append(sum).append(" (expected: ").append(expected).append(")").append('\n');
+    sb.append("Invariant OK: ").append(sum == expected ? "YES" : "NO").append('\n');
+    sb.append("Alive/Total: ").append(alive).append("/").append(pop.size()).append('\n');
     sb.append("Score (fights): ").append(manager.scoreBoard().totalFights()).append('\n');
     output.setText(sb.toString());
   }
